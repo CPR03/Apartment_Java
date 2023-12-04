@@ -47,6 +47,7 @@ public class Request_Maintenance_GUI extends JDialog{
 
         onSelectedUtilities();
     }
+
     Create requestConnector = new Create();
 
     private void onOK() {
@@ -66,12 +67,11 @@ public class Request_Maintenance_GUI extends JDialog{
 
             result.updateInt("req_id", maxReqId + 1); // Increment the max req_id
 
-
-            //result.updateInt("user_id", log.getUserID());
-
+            //Add Request type and Description
             result.updateString("type", cmbReqType.getSelectedItem().toString());
             result.updateString("description", areaConcern.getText());
 
+            //Add Date
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date date = formatter.parse(formatter.format(new Date()));
             result.updateDate("date_created", new java.sql.Date(date.getTime()));
@@ -89,15 +89,14 @@ public class Request_Maintenance_GUI extends JDialog{
             exc.printStackTrace();
         }
 
-
     }
 
-
+    //Will only Display selected utilities
     private void onSelectedUtilities(){
 
-        int userID;
         int amenities = 0, water = 0, cable = 0, wifi = 0;
 
+        //Get Selected Utilities
         try {
 
             Statement state = requestConnector.connect();
@@ -111,14 +110,13 @@ public class Request_Maintenance_GUI extends JDialog{
                 cable = result.getInt("cable");
             }
 
-
             state.close();
-
 
         } catch (Exception exc) {
             exc.printStackTrace();
         }
 
+        //Set Combo box selection
         if(amenities == 1){
             cmbReqType.addItem("Amenities");
         }
@@ -139,12 +137,9 @@ public class Request_Maintenance_GUI extends JDialog{
     }
 
     private void onCancel() {
-        // add your code here if necessary
-
         dispose();
         Dashboard_GUI.Dashboard_GUI();
     }
-
 
     public static void main(String[] args) {
         Request_Maintenance_GUI.Request_Maintenance_GUI();

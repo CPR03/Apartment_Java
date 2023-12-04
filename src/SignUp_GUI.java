@@ -17,16 +17,17 @@ public class SignUp_GUI extends JDialog {
     private JLabel labelLogo;
     private JButton btnLogIn;
 
-
-
     public SignUp_GUI() {
+
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
         txtUserLog.setText("Username");
         passfield.setText("Password");
+
         txtUserLog.addFocusListener(new FocusListener() {
+
             @Override
             public void focusGained(FocusEvent e) {
                 if(txtUserLog.getText().equals("")||txtUserLog.getText().equals("Username")){
@@ -42,6 +43,7 @@ public class SignUp_GUI extends JDialog {
                 }
             }
         });
+
         passfield.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -55,6 +57,7 @@ public class SignUp_GUI extends JDialog {
                 }
             }
         });
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -110,23 +113,34 @@ public class SignUp_GUI extends JDialog {
     }
 
     private void onOK() {
+
         Error err = new Error();
         int flag;
+
+        //Will tell if the user input of username and password text field is: Username, "", Password and then Return error
         if(txtUserLog.getText().equals("Username")||txtUserLog.getText().equals("")||passfield.getText().equals("")||passfield.getText().equals("Password")){
+
             err.nullInput();
-        }else{
+
+        }
+
+        else{
+
             Create create = new Create();
+
             flag=create.createAccount(txtUserLog.getText(), passfield.getText());
+
             if(flag==1){
                 JOptionPane.showMessageDialog(null,"Account successfully created");
             }
+
+
             else return;
+
             dispose();
             LogIn_GUI.LogIn_GUI();
 
         }
-
-
 
     }
 

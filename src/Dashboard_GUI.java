@@ -62,6 +62,7 @@ public class Dashboard_GUI extends JDialog {
     Retrieve retrieve = new Retrieve();
 
     public Dashboard_GUI() {
+
         setContentPane(contentPane);
 
         pane.getVerticalScrollBar().setUnitIncrement(16); //set scroll speed
@@ -81,6 +82,7 @@ public class Dashboard_GUI extends JDialog {
 
         Display(actionListener);
 
+        //Show Request GUI
         btnrequest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -88,7 +90,7 @@ public class Dashboard_GUI extends JDialog {
             }
         });
 
-
+        //Show Pay Rent GUI
         btnPayRent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -96,6 +98,8 @@ public class Dashboard_GUI extends JDialog {
 
             }
         });
+
+        //Show Top Up Balance GUI
         btnTopUp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -105,15 +109,12 @@ public class Dashboard_GUI extends JDialog {
         });
 
 
-
-
         buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -121,7 +122,7 @@ public class Dashboard_GUI extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
+
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -135,12 +136,10 @@ public class Dashboard_GUI extends JDialog {
 
     }
 
-
-
-
-
+    //Display Apartments
     private void Display(ActionListener actionListener){
 
+        //Check account type
         checkType();
 
         //Store all Buttons to Array
@@ -150,11 +149,9 @@ public class Dashboard_GUI extends JDialog {
         //Store all label to Array
         JLabel [] Unit_image={unit1,unit2,unit3,unit4,unit5,unit6,unit7,unit8,unit9,unit10,unit11,unit12};
 
-        //Set Apartment Images
+        //Set Apartment Images and Buttons
         for(int i=0;i<12;i++){
             Apart_buttons[i].addActionListener(actionListener);//add actionlistener to every Rent button
-
-
 
             //Set image for buttons
             Apart_buttons[i].setIcon(new ImageIcon(new ImageIcon("Images/Components/button_red.png").getImage().getScaledInstance(150, 30, Image.SCALE_SMOOTH)));
@@ -167,15 +164,20 @@ public class Dashboard_GUI extends JDialog {
             Unit_image[i].setIcon(new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH)));
 
         }
+
+        //Disable Pay Rent Button is Rent is Done
         if(rentotal.getText().equals("₱ 0.0")){
             btnPayRent.setEnabled(false);
         }
+
+        //Set Button Icon Images and Cursor
         btnrequest.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnPayRent.setCursor(new Cursor(Cursor.HAND_CURSOR));
         profilePic.setIcon(new ImageIcon(new ImageIcon("Images/Components/profile.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         homeLogo.setIcon(new ImageIcon(new ImageIcon("Images/Components/home_logo.png").getImage().getScaledInstance(300, 70, Image.SCALE_SMOOTH)));
         dashMan.setIcon(new ImageIcon(new ImageIcon("Images/Components/dash_board_man.png").getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH)));
 
+        //Table Models
         table1.setModel(new DefaultTableModel(
                 null,
                 new String[] {"Name","Current Apartment","Date created","Rent Per Month","Amount Paid","Payment Method","Duration of Stay","Amenities","Wi-Fi","Cable","Water"}));
@@ -184,7 +186,8 @@ public class Dashboard_GUI extends JDialog {
                 null,
                 new String[] {"Request ID","User ID","Request Type","Description","Date Created",}));
 
-        history();//Add rows by calling history
+        //Add rows by calling history
+        history();
         maintenance();
 
         txtBalance.setText(String.valueOf(UserInfo.get_Balance()));
@@ -192,9 +195,11 @@ public class Dashboard_GUI extends JDialog {
 
     }
 
+    //Get Rent History
     private void history(){ //Get all transaction of the User
 
         try {
+
             Statement state = retrieve.connect();
 
             //Get: User ID, Username, Unit Number, Transaction Date, Monthly Rent, Payment Method, Duration of Stay, Utilities
@@ -204,6 +209,7 @@ public class Dashboard_GUI extends JDialog {
                     "            LEFT JOIN apartment.apartment_unit ON transaction.apart_id = apartment_unit.apr_id" +
                     " Where users.user_id ='"+UserInfo.get_User_id()+"'");
 
+            //Set Rows Data per Column
             while (result.next()){
 
                 Object[] row = {result.getString("userName"),result.getString("unit_number"),
@@ -212,27 +218,28 @@ public class Dashboard_GUI extends JDialog {
                         result.getInt("wifi"),result.getInt("cable"),result.getInt("water")
                 };
 
+
                 DefaultTableModel model = (DefaultTableModel) table1.getModel();
                 model.addRow(new Object[]{row[0], row[1], row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10]});
 
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+                // Center align column
                 for(int i=0;i<11;i++){
-                    table1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); // Center align column
+                    table1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
-
-
 
             }
             state.close();
-
-
 
         } catch (Exception exc) {
 
             exc.printStackTrace();
         }
     }
+
+    //Get Maintenance History
     private void maintenance(){ //Get all transaction of the User
 
         try {
@@ -256,8 +263,6 @@ public class Dashboard_GUI extends JDialog {
                     table2.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); // Center align column
                 }
 
-
-
             }
             state.close();
 
@@ -280,6 +285,7 @@ public class Dashboard_GUI extends JDialog {
             btnPayRent.setVisible(false);
 
         }
+
         else{
             objects = retrieve.get_LastTransaction();
             Object dashpic = objects.get(0);

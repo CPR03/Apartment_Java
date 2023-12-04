@@ -3,6 +3,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+//Contains Create Account and Create Transaction
 public class Create extends Database{
 
 
@@ -20,12 +21,18 @@ public class Create extends Database{
         }
         return state;
     }
+
+    //Will Create Account for the user
     Error err = new Error();
     public int createAccount(String username, String password){
+
         int flag=0;
+
+        //Set SoulSpace Wallet Initial Balance
         int initial=10000;
 
         try {
+
             Statement state = connect();
             ResultSet getRowCount = state.executeQuery("SELECT COUNT(*) as rowCount FROM apartment.users");
 
@@ -35,19 +42,20 @@ public class Create extends Database{
                 // Get the count of rows
                 int rowCount = getRowCount.getInt("rowCount");
 
+                //Get and Set Username and password
                 String usernameInput = username;
                 String passText=password;
-//                String passText = new String(passfield.getPassword());
 
                 boolean usernameExists = false;
 
+                //Create new query statement
                 ResultSet result;
-
                 result = state.executeQuery("SELECT * FROM apartment.users");
+
+                //Create Account if data base is empty
                 if (rowCount == 0) {
 
                     // Insert the new user with user_id 1 if database is empty
-
                         result.moveToInsertRow();
 
                         result.updateInt("user_id", 1); // add the newly created ID
@@ -58,9 +66,6 @@ public class Create extends Database{
                         result.beforeFirst();
 
                         flag=1;
-
-
-
 
                 } else {
 
@@ -97,32 +102,29 @@ public class Create extends Database{
                         result.beforeFirst();
                         flag=1;
 
-
-
-
-
                     }
                 }
             }
 
             state.close();
 
-
         } catch (Exception exc) {
             exc.printStackTrace();
         }
         return flag;
     }
+
+    //Will create transcation
     Update updatestatus = new Update();
     public void createTransaction(){
-        ArrayList<String> util = new ArrayList<>();
-        String unitNum= UserInfo.get_UnitNum(); //Will get only the number from the "Unit '1'"
+
+        ArrayList<String> util = new ArrayList<>(); //utilities arrayList
+        String unitNum = UserInfo.get_UnitNum(); //Will get only the number from the "Unit '1'"
         updatestatus.setStatus(unitNum);
+
         try {
 
             Statement state = connect();
-
-
 
             //Get the latest transaction ID
             ResultSet getMaxTranId = state.executeQuery("SELECT MAX(tran_id) as maxTranId FROM apartment.transaction");
@@ -130,6 +132,7 @@ public class Create extends Database{
             getMaxTranId.next();
             int maxTranId = getMaxTranId.getInt("maxTranId");
 
+            //Select * Columns of Transaction Table
             ResultSet result = state.executeQuery("SELECT * FROM apartment.transaction");
 
             result.moveToInsertRow();
@@ -148,19 +151,18 @@ public class Create extends Database{
 
             //Insert the Payment Method
             result.updateString("payment_method",UserInfo.get_PaymentMode());
+
             //Amount paid
             result.updateDouble("amount_pay",UserInfo.getAmount_paid());
 
             //Insert the  Rent_total
             result.updateDouble("rent_total",UserInfo.getRent_total());
 
-
             //Insert the  monthly due
             result.updateDouble("monthly_due_amount",UserInfo.getMonthly_total());
 
             //Insert the duration
             result.updateString("duration",UserInfo.get_Duration());
-
 
             //Insert Utilities (1 = YES / 0 = NONE)
             util=UserInfo.get_Utilities();
@@ -187,7 +189,6 @@ public class Create extends Database{
             JOptionPane.showMessageDialog(null, "Transaction Successful.");
 
             state.close();
-
 
         } catch (Exception exc) {
             exc.printStackTrace();

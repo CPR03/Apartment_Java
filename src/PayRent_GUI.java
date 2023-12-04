@@ -34,10 +34,15 @@ public class PayRent_GUI extends JDialog {
     int unitprice= (int) last_transaction.get(2);
 
 
+    //Get Duration
     String duration = (String) last_transaction.get(7);
 
+    //Get Due Date
     Date due_date= (Date) last_transaction.get(4);
+
+    //Compute
     Compute compute = new Compute();
+
     public PayRent_GUI() {
 
         setContentPane(contentPane);
@@ -53,8 +58,10 @@ public class PayRent_GUI extends JDialog {
         cmbmethod.setSelectedItem("SoulSpace");
         mode = cmbmethod.getSelectedItem().toString(); //Set default value to avoid empty error
 
+        //Get Charge of mode of payment
         getcharge();
 
+        //Check Selected Utilities and Add it to utilities arrayList
         if((int) last_transaction.get(8)==1){
             utilities.add("Amenities");
         }
@@ -68,8 +75,10 @@ public class PayRent_GUI extends JDialog {
         if((int) last_transaction.get(11)==1){
             utilities.add("Water");
         }
+
         UserInfo.set_Utilities(utilities);
 
+        //Get Monthly Total
         getTotal();
 
         cmbmethod.addActionListener(new ActionListener() {
@@ -105,6 +114,7 @@ public class PayRent_GUI extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
+        //Buttons: Set Icon Image and Hand Cursor
         paybtn.setIcon(new ImageIcon(new ImageIcon("Images/Components/button_red.png").getImage().getScaledInstance(150, 30, Image.SCALE_SMOOTH)));
         paybtn.setHorizontalTextPosition(SwingConstants.CENTER);
         paybtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -117,6 +127,7 @@ public class PayRent_GUI extends JDialog {
         txtDiscount.setText((discount) + "%");
         txtunitprice.setText(String.valueOf(unitprice));
 
+        //Get System Date Calendar
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(due_date);
         calendar.add(Calendar.MONTH, 1);// Get the Due date after adding a month
@@ -124,31 +135,38 @@ public class PayRent_GUI extends JDialog {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(updatedDueDate);
 
+        //Set next bill date
         txt_nextbill.setText(formattedDate);
 
     }
+
+    //Get last transaction
     double last_total= (double) last_transaction.get(13);
+
+    //charge fee variable
     double chargefee;
+
     //Get Amount Due
     private void getTotal(){
+
         double total,price;
 
-
+        //Get charge fee text
         chargefee = Double.parseDouble(txtCharge.getText());
 
+        //Get total utilities free
         utilfee =compute.getUtilfee() ;
 
+        //Compute price
         price = unitprice*(discount/100);
 
-        total = ((unitprice-price)+chargefee+utilfee); //Compute Total
+        //Compute Total
+        total = ((unitprice-price)+chargefee+utilfee);
+
+        //Set text
         txtbill.setText(String.valueOf(total));
 
         UserInfo.setMonthly_total(total-chargefee);
-
-
-
-
-
 
     }
 
@@ -165,34 +183,38 @@ public class PayRent_GUI extends JDialog {
 
     Payment pay = new Payment();
 
-
-
+    //Flag
     int status;
 
+    //Will Create Receipt
     private void onPay() {
+
         UserInfo.set_PaymentMode(mode);
         status = pay.confirmPayment(mode);
         //Status 0 = successful payment
         //Status 1 = unsuccessful payment
         //Status -1 = Null payment
 
-        if(status==0){// if Payment successful print receipt update database
-
+        //if Payment successful print receipt update database
+        if(status==0){
 
             StringBuilder convert = new StringBuilder();
+
+            //Get all utilities
             for (int i = 0; i < utilities.size(); i++) {
-                convert.append(utilities.get(i)); //Get all utilities
+
+                convert.append(utilities.get(i));
 
                 if (i < utilities.size() - 1)
                     convert.append(" ");
             }
 
+            //Set Receipt Font
             Font font = new Font("Arial", Font.PLAIN, 14);
             receipttxt.setFont(font);
 
-
+            //Set Receipt Text
             receipttxt.setText(
-
 
                     "\t     ~User Info~" + "\n" +
                             "\tUser ID: " + UserInfo.get_User_id() + "\n" +
@@ -206,65 +228,58 @@ public class PayRent_GUI extends JDialog {
                             "\tDuration of Stay: " + duration + "\n"+
                             "\tUtilities: " + convert +"\n"+"\n"+
 
-
                             "\t     ~Total~" + "\n" +
                             "\tUtilities Fee: " + utilfee + "\n"+
                             "\tCharge Fee: " + txtCharge.getText() +"\n"+
                             "\tDiscount: " + discount+"%"+"\n"+
                             "\tTotal: " + UserInfo.getMonthly_total()
-
-
             );
-
 
             //Update to Database
             addTransaction();
 
-        }else if (status==1){
+        }
+
+        else if (status==1){
             JOptionPane.showMessageDialog(null,"Payment Unsuccessful\nPlease Try again!");
             onPay(); //Call itself
         }
 
-
-
     }
 
+    Create payRentConnector = new Create();
 
+    //Add Transaction to Database
     private void addTransaction(){
 
-
-
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apartment", "root", "root");
-            Statement state = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
+            Statement state = payRentConnector.connect();
 
             ResultSet getMaxTranId = state.executeQuery("SELECT MAX(tran_id) as maxTranId FROM apartment.transaction");
 
             getMaxTranId.next();
             int maxTranId = getMaxTranId.getInt("maxTranId");
 
-
             ResultSet result = state.executeQuery("SELECT * FROM apartment.transaction");
-
 
             result.moveToInsertRow();
 
-
             result.updateInt("tran_id", maxTranId+1);// Increment the max tran_id
 
-            //Date
-
+            //Add Date
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date date = formatter.parse(formatter.format(new Date()));
             result.updateDate("Date", new java.sql.Date(date.getTime()));
 
             //Payment Method
             result.updateString("payment_method",mode);
+
+            //add payment of the user
             result.updateDouble("amount_pay",Double.parseDouble(Payment.getText()));
 
+            //Discount
             result.updateDouble("Discount_code",discount);
-
 
             //Rent_total
             result.updateDouble("rent_total",last_total-monthly);
@@ -272,9 +287,8 @@ public class PayRent_GUI extends JDialog {
             //monthly due
             result.updateDouble("monthly_due_amount",monthly);
 
+            //Duration
             result.updateString("duration",duration);
-
-
 
             //utilities
             result.updateInt("amenities", (int) last_transaction.get(8));
@@ -291,7 +305,6 @@ public class PayRent_GUI extends JDialog {
             JOptionPane.showMessageDialog(null, "Transaction Successful.");
 
             state.close();
-            con.close();
 
         } catch (Exception exc) {
             exc.printStackTrace();
@@ -299,7 +312,6 @@ public class PayRent_GUI extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
         Dashboard_GUI.Dashboard_GUI();
     }

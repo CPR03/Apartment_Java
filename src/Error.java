@@ -29,4 +29,14 @@ public class Error {
 
     }
 
+    //User Not Found Error
+    public void userNotFound(){
+        JOptionPane.showMessageDialog(null, "User not found or exists.", "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    //Wrong Password
+    public void wrongPassword(){
+        JOptionPane.showMessageDialog(null, "User not found or exists.", "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
 }

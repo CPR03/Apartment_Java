@@ -8,10 +8,11 @@ import java.util.ArrayList;
 
 public class Retrieve extends Database{
 
-
     @Override
     public Statement connect() {
+
         Statement state = null;
+
         try {
 
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apartment", "root", "root");
@@ -23,13 +24,18 @@ public class Retrieve extends Database{
         }
         return state;
     }
+
+    //Will check the user Balance
     public double checkBalance(String username){
 
         double bal=0;
+
         try {
+
             Statement state = connect();
             ResultSet result = state.executeQuery("SELECT Balance FROM apartment.users WHERE userName ='"+username+"'");
 
+            //Get balance
             while(result.next())
                 bal = result.getDouble("Balance");
 
@@ -40,41 +46,46 @@ public class Retrieve extends Database{
 
         return bal;
     }
+
+    Error err = new Error();
+    //Will check if account exists
     public boolean checkAccount(String username,String password){
+
+        //flag
         boolean exist=false;
+
         try {
+
             Statement state = connect();
             ResultSet result = state.executeQuery("SELECT * FROM apartment.users where userName='"+username+"'");
 
             int flag = 0; //tell if user OK
 
             while (result.next()) {
-                int  user_id=result.getInt("user_id");
+
+                //Get the inputted username, password, and user_id
+                int user_id = result.getInt("user_id");
                 String userNameFromDatabase = result.getString("userName");
                 String userPasswordFromDatabase = result.getString("userPassword");
 
+                //Check if the inputted username is equals to username in the database
                 if (userNameFromDatabase.equals(username)) {
+
                     flag = 1;
 
                     //if password OK Open Dashboard
                     if (userPasswordFromDatabase.equals(password)){
-                        //save the login for every object to be accessed
 
+                        //save the login for every object to be accessed
                         Login_Details log = new Login_Details(user_id,username);
                         log.saveinstance();
 
-
-                        //New
-
-
                         exist=true;
-
                     }
 
-
-                    //if wrong password
+                    //if wrong password, display error
                     else {
-                        JOptionPane.showMessageDialog(null, "Wrong Password!", "Error", JOptionPane.WARNING_MESSAGE);
+                        err.wrongPassword();
                     }
 
                     break;
@@ -82,8 +93,9 @@ public class Retrieve extends Database{
                 }
             }
 
+            //if flag == 0 display password is wrong
             if (flag == 0) {
-                JOptionPane.showMessageDialog(null, "User not found or exists.", "Error", JOptionPane.WARNING_MESSAGE);
+                err.userNotFound();
             }
 
         } catch (Exception exc) {
@@ -93,21 +105,21 @@ public class Retrieve extends Database{
         return exist;
     }
 
+    //Will check the apartment Info
     public ResultSet checkApartmentinfo(){
+
         ResultSet result = null;
         try {
 
             Statement state = connect();
+
+            //Retrieve Apartment: Unit, Photo,
             result = state.executeQuery("SELECT  apartment_unit.*,apartment.unit_photo.*" +
                     "FROM apartment.apartment_unit JOIN apartment.unit_photo " +
                     "ON unit_photo.unit_number = apartment_unit.unit_number" +
                     " WHERE unit_photo.unit_number= '"+UserInfo.get_UnitNum()+"'");
 
-
             result.next();
-
-
-
 
         } catch (Exception exc) {
 
@@ -116,20 +128,24 @@ public class Retrieve extends Database{
         return result;
     }
 
-
+    //Check Account Type
     public String checktype(){
+
         String type = "";
+
         try {
+
             Statement state = connect();
 
-            //Get row count from User ID
+            //Get user ID
             ResultSet result = state.executeQuery("SELECT COUNT(*) as Rowcount FROM apartment.transaction WHERE user_id ='"+UserInfo.get_User_id()+"'");
             result.next();
+
 
             int count = result.getInt("Rowcount");
             result.close();
 
-            //Check Row Count
+            //Check if user ID is old or new
             if(count>0){
                 type="old";
             }
@@ -147,6 +163,7 @@ public class Retrieve extends Database{
         return type;
     }
 
+    //Get the last transaction (put to variable) (will be used by the dashboard)
     public  ArrayList get_LastTransaction(){
 
         Image image; //unit photo
@@ -192,13 +209,15 @@ public class Retrieve extends Database{
         return dashboard;
     }
 
+    //Get last transaction (put to arrayList) (will be used by PayRent)
+    Create lastTrans = new Create();
     public  ArrayList get_lastTrans(){
+
         ArrayList<Object> last_transaction = new ArrayList<>();
 
         try {
 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apartment", "root", "root");
-            Statement state = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            Statement state = lastTrans.connect();
 
             //Get Apartment ID, Apartment Unit Number, Unit Price, and all Columns of Transaction Table
             ResultSet result=state.executeQuery(" SELECT apartment_unit.apr_id,apartment_unit.unit_number,apartment_unit.unit_price, transaction.*" +
@@ -208,9 +227,6 @@ public class Retrieve extends Database{
 
             //Put Data to the arrayList (last_transaction)
             while (result.next()){
-
-
-
 
                 last_transaction.add(result.getInt("apr_id")); //apartment ID
                 last_transaction.add(result.getString("unit_number")); //unit number
@@ -227,11 +243,9 @@ public class Retrieve extends Database{
                 last_transaction.add(result.getString("payment_method")); //payment method
                 last_transaction.add(result.getDouble("rent_total"));
 
-
             }
 
             state.close();
-            con.close();
 
         } catch (Exception exc) {
             exc.printStackTrace();
@@ -239,8 +253,5 @@ public class Retrieve extends Database{
 
         return last_transaction;
     }
-
-
-
 
 }

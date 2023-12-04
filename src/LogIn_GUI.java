@@ -22,16 +22,16 @@ public class LogIn_GUI extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-
+        //Make username and password text placeholder disappear
         btnSignUp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 onSignUp();
-
             }
         });
+
         txtUserLog.setText("Username");
         txtPass.setText("Password");
+
         txtUserLog.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -48,6 +48,7 @@ public class LogIn_GUI extends JDialog {
                 }
             }
         });
+
         txtPass.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -61,7 +62,6 @@ public class LogIn_GUI extends JDialog {
                 }
             }
         });
-
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -106,18 +106,15 @@ public class LogIn_GUI extends JDialog {
 
         btnSignUp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-
     }
 
-
     private void onSignUp() {
-
-        setVisible(false);//hide login
+        //hide login
+        setVisible(false);
 
         // Create and show the sign-up dialog
         SignUp_GUI.SignUp_GUI();
     }
-
 
     Error error = new Error();
 
@@ -133,25 +130,14 @@ public class LogIn_GUI extends JDialog {
             }
         }
 
-
-
-
-
-
-
     }
 
     private void onCancel() {
-
         System.exit(0);
     }
 
-
-
     public static void main(String[] args) {
-
         LogIn_GUI.LogIn_GUI();
-
     }
 
     Image imagelogo = new ImageIcon("Images/Components/logo.png").getImage();
