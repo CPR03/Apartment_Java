@@ -24,7 +24,37 @@ public class SignUp_GUI extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        txtUserLog.setText("Username");
+        passfield.setText("Password");
+        txtUserLog.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(txtUserLog.getText().equals("")||txtUserLog.getText().equals("Username")){
+                    txtUserLog.setText("");
+                }
 
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(txtUserLog.getText().equals("")){
+                    txtUserLog.setText("Username");
+                }
+            }
+        });
+        passfield.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                passfield.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(passfield.getText().equals("")){
+                    passfield.setText("Password");
+                }
+            }
+        });
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -80,15 +110,22 @@ public class SignUp_GUI extends JDialog {
     }
 
     private void onOK() {
+        Error err = new Error();
         int flag;
-        Create create = new Create();
-        flag=create.createAccount(txtUserLog.getText(), passfield.getText());
-        if(flag==1){
-            JOptionPane.showMessageDialog(null,"Account successfully created");
+        if(txtUserLog.getText().equals("Username")||txtUserLog.getText().equals("")||passfield.getText().equals("")||passfield.getText().equals("Password")){
+            err.nullInput();
+        }else{
+            Create create = new Create();
+            flag=create.createAccount(txtUserLog.getText(), passfield.getText());
+            if(flag==1){
+                JOptionPane.showMessageDialog(null,"Account successfully created");
+            }
+            else return;
+            dispose();
+            LogIn_GUI.LogIn_GUI();
+
         }
-        else return;
-        dispose();
-        LogIn_GUI.LogIn_GUI();
+
 
 
     }

@@ -22,11 +22,43 @@ public class LogIn_GUI extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+
         btnSignUp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 onSignUp();
 
+            }
+        });
+        txtUserLog.setText("Username");
+        txtPass.setText("Password");
+        txtUserLog.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(txtUserLog.getText().equals("")||txtUserLog.getText().equals("Username")){
+                    txtUserLog.setText("");
+                }
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(txtUserLog.getText().equals("")){
+                    txtUserLog.setText("Username");
+                }
+            }
+        });
+        txtPass.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtPass.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(txtPass.getText().equals("")){
+                    txtPass.setText("Password");
+                }
             }
         });
 
@@ -77,6 +109,7 @@ public class LogIn_GUI extends JDialog {
 
     }
 
+
     private void onSignUp() {
 
         setVisible(false);//hide login
@@ -86,16 +119,21 @@ public class LogIn_GUI extends JDialog {
     }
 
 
-
+    Error error = new Error();
 
     private void onOK() {
-        Retrieve check = new Retrieve();
-
-        //if succsessfull go to Dashboard
-        if(check.checkAccount(txtUserLog.getText(), txtPass.getText())){
-            dispose();
-            Dashboard_GUI.Dashboard_GUI();
+        if(txtUserLog.getText().equals("Username")||txtUserLog.getText().equals("")||txtPass.getText().equals("")||txtPass.getText().equals("Password")){
+            error.nullInput();
+        }else{
+            Retrieve check = new Retrieve();
+            //if succsessfull go to Dashboard
+            if(check.checkAccount(txtUserLog.getText(), txtPass.getText())){
+                dispose();
+                Dashboard_GUI.Dashboard_GUI();
+            }
         }
+
+
 
 
 

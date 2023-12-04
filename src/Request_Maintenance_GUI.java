@@ -92,6 +92,7 @@ public class Request_Maintenance_GUI extends JDialog{
 
     }
 
+
     private void onSelectedUtilities(){
 
         int userID;

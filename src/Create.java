@@ -20,7 +20,7 @@ public class Create extends Database{
         }
         return state;
     }
-
+    Error err = new Error();
     public int createAccount(String username, String password){
         int flag=0;
         int initial=10000;
@@ -48,16 +48,18 @@ public class Create extends Database{
 
                     // Insert the new user with user_id 1 if database is empty
 
-                    result.moveToInsertRow();
+                        result.moveToInsertRow();
 
-                    result.updateInt("user_id", 1); // add the newly created ID
-                    result.updateString("userName", usernameInput); // add username
-                    result.updateString("userPassword", passText); // add password
-                    result.updateDouble("Balance",initial);
-                    result.insertRow();
-                    result.beforeFirst();
+                        result.updateInt("user_id", 1); // add the newly created ID
+                        result.updateString("userName", usernameInput); // add username
+                        result.updateString("userPassword", passText); // add password
+                        result.updateDouble("Balance",initial);
+                        result.insertRow();
+                        result.beforeFirst();
 
-                    flag=1;
+                        flag=1;
+
+
 
 
                 } else {
@@ -94,6 +96,9 @@ public class Create extends Database{
                         result.insertRow();
                         result.beforeFirst();
                         flag=1;
+
+
+
 
 
                     }

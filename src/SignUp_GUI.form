@@ -47,7 +47,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Username"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="cfa29" class="javax.swing.JLabel">
@@ -67,7 +67,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Password"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="3c29f" class="javax.swing.JButton" binding="buttonOK">
