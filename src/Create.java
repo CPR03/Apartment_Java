@@ -6,20 +6,7 @@ import java.util.ArrayList;
 //Contains Create Account and Create Transaction
 public class Create extends Database{
 
-    @Override
-    public Statement connect() {
-        Statement state = null;
-        try {
 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apartment", "root", "root");
-            state = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-        return state;
-    }
 
     //Will Create Account for the user
     Error err = new Error();
@@ -32,7 +19,8 @@ public class Create extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
             ResultSet getRowCount = state.executeQuery("SELECT COUNT(*) as rowCount FROM apartment.users");
 
             // Move to the first (and only) row of the result set
@@ -123,7 +111,8 @@ public class Create extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
 
             //Get the latest transaction ID
             ResultSet getMaxTranId = state.executeQuery("SELECT MAX(tran_id) as maxTranId FROM apartment.transaction");

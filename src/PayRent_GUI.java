@@ -259,8 +259,8 @@ public class PayRent_GUI extends JDialog {
     private void addTransaction(){
 
         try {
+            Statement state = payRentConnector.connect().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            Statement state = payRentConnector.connect();
 
             ResultSet getMaxTranId = state.executeQuery("SELECT MAX(tran_id) as maxTranId FROM apartment.transaction");
 

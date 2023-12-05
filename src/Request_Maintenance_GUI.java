@@ -52,8 +52,8 @@ public class Request_Maintenance_GUI extends JDialog{
     private void onOK() {
 
         try {
+            Statement state = requestConnector.connect().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            Statement state = requestConnector.connect();
 
             //Get Max Request ID (Will be used as basis and to be incremented)
             ResultSet getMaxReqId = state.executeQuery("SELECT MAX(req_id) as maxReqId FROM apartment.maintenance_req");
@@ -101,7 +101,8 @@ public class Request_Maintenance_GUI extends JDialog{
         //Get Selected Utilities
         try {
 
-            Statement state = requestConnector.connect();
+            Statement state = requestConnector.connect().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
 
             ResultSet result = state.executeQuery("SELECT * FROM apartment.transaction WHERE user_id = '" + UserInfo.get_User_id()+ "'");
 

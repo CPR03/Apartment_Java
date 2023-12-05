@@ -9,22 +9,7 @@ import java.util.ArrayList;
 //Class Containing Balance Checker, Account Checker, Account Type, Last Transaction
 public class Retrieve extends Database{
 
-    @Override
-    public Statement connect() {
 
-        Statement state = null;
-
-        try {
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apartment", "root", "root");
-            state = con.createStatement();
-
-
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-        return state;
-    }
 
     //Will check the user Balance
     public double checkBalance(String username){
@@ -33,7 +18,7 @@ public class Retrieve extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement();
             ResultSet result = state.executeQuery("SELECT Balance FROM apartment.users WHERE userName ='"+username+"'");
 
             //Get balance
@@ -57,7 +42,7 @@ public class Retrieve extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement();
             ResultSet result = state.executeQuery("SELECT * FROM apartment.users where userName='"+username+"'");
 
             int flag = 0; //tell if user OK
@@ -114,7 +99,7 @@ public class Retrieve extends Database{
         ResultSet result = null;
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement();
 
             //Retrieve Apartment: Unit, Photo,
             result = state.executeQuery("SELECT  apartment_unit.*,apartment.unit_photo.*" +
@@ -139,7 +124,7 @@ public class Retrieve extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement();
 
             //Get user ID
             ResultSet result = state.executeQuery("SELECT COUNT(*) as Rowcount FROM apartment.transaction WHERE user_id ='"+UserInfo.get_User_id()+"'");
@@ -178,7 +163,7 @@ public class Retrieve extends Database{
 
         try {
 
-            Statement state = connect();
+            Statement state = connect().createStatement();
 
             //Get Unit Photo, Rent Total, Duration of Stay, Transaction ID
             ResultSet result=state.executeQuery(" SELECT apartment_unit.unit_photo, transaction.rent_total, transaction.duration,transaction.user_id,transaction.tran_id\n" +
@@ -214,14 +199,14 @@ public class Retrieve extends Database{
     }
 
     //Get last transaction (put to arrayList) (will be used by PayRent)
-    Create lastTrans = new Create();
+
     public  ArrayList get_LastTransaction(int useTransactionArray){
 
         ArrayList<Object> last_transaction = new ArrayList<>();
 
         try {
+            Statement state = connect().createStatement();
 
-            Statement state = lastTrans.connect();
 
             //Get Apartment ID, Apartment Unit Number, Unit Price, and all Columns of Transaction Table
             ResultSet result=state.executeQuery(" SELECT apartment_unit.apr_id,apartment_unit.unit_number,apartment_unit.unit_price, transaction.*" +

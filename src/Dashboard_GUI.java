@@ -197,10 +197,11 @@ public class Dashboard_GUI extends JDialog {
 
     //Get Rent History. Contains all transaction of the User
     private void history(){
+        Retrieve con = new Retrieve();
 
         try {
 
-            Statement state = retrieve.connect();
+            Statement state = con.connect().createStatement();
 
             //Get: User ID, Username, Unit Number, Transaction Date, Monthly Rent, Payment Method, Duration of Stay, Utilities
             ResultSet result = state.executeQuery(" SELECT apartment.users.user_id,apartment.users.userName,apartment.apartment_unit.unit_number,apartment.transaction.Date, apartment.transaction.monthly_due_amount,apartment.transaction.payment_method, apartment.transaction.duration,apartment.transaction.amenities,apartment.transaction.wifi,apartment.transaction.cable,apartment.transaction.water,apartment.transaction.amount_pay\n" +
@@ -255,8 +256,9 @@ public class Dashboard_GUI extends JDialog {
     private void maintenance(){ //Get all transaction of the User
 
         try {
+            Statement state = retrieve.connect().createStatement();
 
-            Statement state = retrieve.connect();
+
 
             //Get: User ID, Username, Unit Number, Transaction Date, Monthly Rent, Payment Method, Duration of Stay, Utilities
             ResultSet result = state.executeQuery(" SELECT *" +
