@@ -301,7 +301,6 @@ public class Dashboard_GUI extends JDialog {
         }
     }
 
-
     ArrayList objects;
     //Check user type
     private void checkType(){

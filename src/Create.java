@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Create extends Database{
 
 
-
     //Will Create Account for the user
     Error err = new Error();
     public int createAccount(String username, String password){
