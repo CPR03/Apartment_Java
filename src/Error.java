@@ -1,5 +1,6 @@
 import javax.swing.*;
 
+//Class Containing Error Handling
 public class Error {
 
     //Insufficient Funds Error
@@ -36,7 +37,7 @@ public class Error {
 
     //Wrong Password
     public void wrongPassword(){
-        JOptionPane.showMessageDialog(null, "User not found or exists.", "Error", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Wrong password.", "Error", JOptionPane.WARNING_MESSAGE);
     }
 
 }

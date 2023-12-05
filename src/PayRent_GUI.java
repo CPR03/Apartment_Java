@@ -25,7 +25,7 @@ public class PayRent_GUI extends JDialog {
     String mode;
 
     Retrieve retrieve = new Retrieve();
-    ArrayList last_transaction = retrieve.get_lastTrans();
+    ArrayList last_transaction = retrieve.get_LastTransaction(1);
     ArrayList <String> utilities = new ArrayList<>();
     double utilfee;
     String unit_num= (String) last_transaction.get(1);
@@ -81,16 +81,18 @@ public class PayRent_GUI extends JDialog {
         //Get Monthly Total
         getTotal();
 
+        //Display Payment mode
         cmbmethod.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 mode = cmbmethod.getSelectedItem().toString();
                 getcharge();
                 getTotal();
-                //Display Payment mode
 
             }
         });
+
 
         buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -99,7 +101,7 @@ public class PayRent_GUI extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -107,7 +109,7 @@ public class PayRent_GUI extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
+
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -196,7 +198,7 @@ public class PayRent_GUI extends JDialog {
         //Status -1 = Null payment
 
         //if Payment successful print receipt update database
-        if(status==0){
+        if(status == 0){
 
             StringBuilder convert = new StringBuilder();
 
@@ -235,14 +237,18 @@ public class PayRent_GUI extends JDialog {
                             "\tTotal: " + UserInfo.getMonthly_total()
             );
 
+            //Disable button after paying
+            paybtn.setEnabled(false);
             //Update to Database
             addTransaction();
-
+            
         }
 
-        else if (status==1){
+        else if (status == 1){
+
             JOptionPane.showMessageDialog(null,"Payment Unsuccessful\nPlease Try again!");
             onPay(); //Call itself
+
         }
 
     }
@@ -295,6 +301,7 @@ public class PayRent_GUI extends JDialog {
             result.updateInt("wifi", (int) last_transaction.get(9));
             result.updateInt("cable", (int) last_transaction.get(10));
             result.updateInt("water", (int) last_transaction.get(11));
+
             //Foreign keys
             result.updateInt("user_id",UserInfo.get_User_id());
             result.updateInt("apart_id", (int) last_transaction.get(0));

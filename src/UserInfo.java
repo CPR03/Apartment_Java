@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class UserInfo extends Create{
+abstract class UserInfo extends Create{
     //Userinfo
     private static String username;
     private static double balance;

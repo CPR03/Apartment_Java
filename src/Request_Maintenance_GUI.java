@@ -30,7 +30,6 @@ public class Request_Maintenance_GUI extends JDialog{
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -38,7 +37,6 @@ public class Request_Maintenance_GUI extends JDialog{
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -50,22 +48,26 @@ public class Request_Maintenance_GUI extends JDialog{
 
     Create requestConnector = new Create();
 
+    //Create Request Maintenance and Send it to Database
     private void onOK() {
 
         try {
 
             Statement state = requestConnector.connect();
 
+            //Get Max Request ID (Will be used as basis and to be incremented)
             ResultSet getMaxReqId = state.executeQuery("SELECT MAX(req_id) as maxReqId FROM apartment.maintenance_req");
             getMaxReqId.next();
 
+            //Put result to maxReqID
             int maxReqId = getMaxReqId.getInt("maxReqId");
 
             ResultSet result = state.executeQuery("SELECT * FROM apartment.maintenance_req");
 
             result.moveToInsertRow();
 
-            result.updateInt("req_id", maxReqId + 1); // Increment the max req_id
+            // Increment the max req_id
+            result.updateInt("req_id", maxReqId + 1);
 
             //Add Request type and Description
             result.updateString("type", cmbReqType.getSelectedItem().toString());
@@ -103,11 +105,14 @@ public class Request_Maintenance_GUI extends JDialog{
 
             ResultSet result = state.executeQuery("SELECT * FROM apartment.transaction WHERE user_id = '" + UserInfo.get_User_id()+ "'");
 
+            //Get results of selected utilities (1 = YES || 2 = NO)
             while(result.next()){
+
                 wifi = result.getInt("wifi");
                 amenities = result.getInt("amenities");
                 water = result.getInt("water");
                 cable = result.getInt("cable");
+
             }
 
             state.close();

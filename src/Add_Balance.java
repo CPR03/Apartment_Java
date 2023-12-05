@@ -91,6 +91,7 @@ public class Add_Balance extends JDialog {
     int amount=0;
     double total = 0;
     private void onEnter() {
+        UserInfo info = new Apartment_info();
         String iamount = txtamount.getText();
         if(isNumeric(iamount)){
 //            error when charge fee is greater than inputted amount

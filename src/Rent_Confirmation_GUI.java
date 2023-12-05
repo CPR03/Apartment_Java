@@ -46,7 +46,6 @@ public class Rent_Confirmation_GUI extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -54,7 +53,6 @@ public class Rent_Confirmation_GUI extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -63,6 +61,7 @@ public class Rent_Confirmation_GUI extends JDialog {
 
         homeLogo.setIcon(new ImageIcon(new ImageIcon("Images/Components/home_logo.png").getImage().getScaledInstance(200, 70, Image.SCALE_SMOOTH)));
 
+        //Button: Set Icon and Cursor
         buttonOK.setIcon(new ImageIcon(new ImageIcon("Images/Components/button_red.png").getImage().getScaledInstance(150, 30, Image.SCALE_SMOOTH)));
         buttonOK.setHorizontalTextPosition(SwingConstants.CENTER);
         buttonOK.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -76,11 +75,12 @@ public class Rent_Confirmation_GUI extends JDialog {
 
     }
 
-
+    //Get Selected Utilities, Duration
     private void onOK() {
-        Rent_info info = new Rent_info();
-        //get selected Utility/s
 
+        Rent_info info = new Rent_info();
+
+        //Get Selected Utilities
         if(amenitiesCheckBox.isSelected()){
             utilities.add(amenitiesCheckBox.getText());
         }
@@ -94,6 +94,7 @@ public class Rent_Confirmation_GUI extends JDialog {
             utilities.add(wiFiCheckBox.getText());
         }
 
+        //Get Selected Duration of Stay
         String duration;
         if(btn1month.isSelected()){
             duration ="1 month";
@@ -104,12 +105,11 @@ public class Rent_Confirmation_GUI extends JDialog {
         }else {
             duration ="1 year";
         }
+
+        //Send Selected Utilities and Duration to User Info
         info.setDuration(duration);
-
         info.setUtilities(utilities);
-
         info.saveinstance();
-
 
         dispose();
         Pay_GUI.pay_GUI();
@@ -117,13 +117,12 @@ public class Rent_Confirmation_GUI extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
         Selected_Apr_GUI.Selected_Apr_GUI();
     }
 
-    Image imagelogo = new ImageIcon("Images/Components/logo.png").getImage();
 
+    Image imagelogo = new ImageIcon("Images/Components/logo.png").getImage();
     public static void main(String[] args) {
         Rent_Confirmation_GUI.Rent_Confirmation_GUI();
     }
@@ -140,6 +139,5 @@ public class Rent_Confirmation_GUI extends JDialog {
         dialog.setVisible(true);
 
     }
-
 
 }

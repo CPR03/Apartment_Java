@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 
+//Class Containing Balance Checker, Account Checker, Account Type, Last Transaction
 public class Retrieve extends Database{
 
     @Override
@@ -73,6 +74,7 @@ public class Retrieve extends Database{
 
                     flag = 1;
 
+
                     //if password OK Open Dashboard
                     if (userPasswordFromDatabase.equals(password)){
 
@@ -85,6 +87,7 @@ public class Retrieve extends Database{
 
                     //if wrong password, display error
                     else {
+
                         err.wrongPassword();
                     }
 
@@ -125,6 +128,7 @@ public class Retrieve extends Database{
 
             exc.printStackTrace();
         }
+
         return result;
     }
 
@@ -164,7 +168,7 @@ public class Retrieve extends Database{
     }
 
     //Get the last transaction (put to variable) (will be used by the dashboard)
-    public  ArrayList get_LastTransaction(){
+    public  ArrayList get_LastTransaction(String useTransactionVariable){
 
         Image image; //unit photo
         double remaining; //remaining balance
@@ -211,7 +215,7 @@ public class Retrieve extends Database{
 
     //Get last transaction (put to arrayList) (will be used by PayRent)
     Create lastTrans = new Create();
-    public  ArrayList get_lastTrans(){
+    public  ArrayList get_LastTransaction(int useTransactionArray){
 
         ArrayList<Object> last_transaction = new ArrayList<>();
 

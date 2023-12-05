@@ -195,8 +195,8 @@ public class Dashboard_GUI extends JDialog {
 
     }
 
-    //Get Rent History
-    private void history(){ //Get all transaction of the User
+    //Get Rent History. Contains all transaction of the User
+    private void history(){
 
         try {
 
@@ -212,25 +212,37 @@ public class Dashboard_GUI extends JDialog {
             //Set Rows Data per Column
             while (result.next()){
 
-                Object[] row = {result.getString("userName"),result.getString("unit_number"),
-                        result.getDate("Date"),result.getDouble("monthly_due_amount"),result.getDouble("amount_pay"),result.getString("payment_method"),
-                        result.getString("duration"),result.getInt("amenities"),
-                        result.getInt("wifi"),result.getInt("cable"),result.getInt("water")
+                //Get Transaction Data and add it to row arrayList
+                Object[] row = {
+
+                        result.getString("userName"),
+                        result.getString("unit_number"),
+                        result.getDate("Date"),
+                        result.getDouble("monthly_due_amount"),
+                        result.getDouble("amount_pay"),
+                        result.getString("payment_method"),
+                        result.getString("duration"),
+                        result.getInt("amenities"),
+                        result.getInt("wifi"),result.getInt("cable"),
+                        result.getInt("water")
                 };
 
-
+                //Get Table 1 Model
                 DefaultTableModel model = (DefaultTableModel) table1.getModel();
+
+                //Add row
                 model.addRow(new Object[]{row[0], row[1], row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10]});
 
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-                // Center align column
+                // Center align the column
                 for(int i=0;i<11;i++){
                     table1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
 
             }
+
             state.close();
 
         } catch (Exception exc) {
@@ -243,27 +255,42 @@ public class Dashboard_GUI extends JDialog {
     private void maintenance(){ //Get all transaction of the User
 
         try {
+
             Statement state = retrieve.connect();
+
             //Get: User ID, Username, Unit Number, Transaction Date, Monthly Rent, Payment Method, Duration of Stay, Utilities
             ResultSet result = state.executeQuery(" SELECT *" +
                     "    FROM apartment.maintenance_req Where maintenance_req.user_id ='"+UserInfo.get_User_id()+"'");
 
+            //Set Rows Data per Column
             while (result.next()){
 
-                Object[] data = {result.getInt("req_id"),result.getInt("user_id"),result.getString("type"),
-                        result.getString("description"),result.getDate("date_created")
+                //Get Transaction Data and add it to data arrayList
+                Object[] data = {
+
+                        result.getInt("req_id"),
+                        result.getInt("user_id"),
+                        result.getString("type"),
+                        result.getString("description"),
+                        result.getDate("date_created")
                 };
 
+                //Get Table 2 Model
                 DefaultTableModel model = (DefaultTableModel) table2.getModel();
+
+                //Add Data to the table using the data arrayList
                 model.addRow(new Object[]{data[0], data[1], data[2],data[3],data[4]});
 
                 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                 centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+                // Center align column
                 for(int i=0;i<5;i++){
-                    table2.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); // Center align column
+                    table2.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
                 }
 
             }
+
             state.close();
 
         } catch (Exception exc) {
@@ -277,7 +304,6 @@ public class Dashboard_GUI extends JDialog {
     //Check user type
     private void checkType(){
 
-
         //Hide Request Maintenance and Pay Rent Button if New
         if(retrieve.checktype().equals("new")){
 
@@ -287,7 +313,8 @@ public class Dashboard_GUI extends JDialog {
         }
 
         else{
-            objects = retrieve.get_LastTransaction();
+
+            objects = retrieve.get_LastTransaction("check");
             Object dashpic = objects.get(0);
             ImageIcon icon = new ImageIcon((Image) dashpic);
 
@@ -298,34 +325,27 @@ public class Dashboard_GUI extends JDialog {
             scrollPanel.setVisible(false);
             myInfo_panel.setVisible(true);
 
-            //dash_pic.setIcon(new ImageIcon(icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH)));
             dash_pic.setIcon(icon);
             rentotal.setText("₱ "+ objects.get(2));
             duration.setText(String.valueOf(objects.get(1)));
-
-            //Display Data to table-Now working
 
         }
 
     }
 
+    //Show Request Maintenance GUI
     private void onRequest(){
         Request_Maintenance_GUI.Request_Maintenance_GUI();
     }
-
 
     public void onCancel() {
         dispose();
         LogIn_GUI.LogIn_GUI();
     }
 
-
     public static void main(String[] args) {
-
         Dashboard_GUI.Dashboard_GUI();
-
     }
-
 
     Image imageLogo = new ImageIcon("Images/Components/logo.png").getImage();
     static void Dashboard_GUI() {

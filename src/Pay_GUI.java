@@ -155,6 +155,7 @@ public class Pay_GUI extends JDialog {
 
 
     }
+
     private void getPaymentmode(){
 
         switch (mode) {
@@ -165,8 +166,6 @@ public class Pay_GUI extends JDialog {
 
 
     }
-
-
 
     Payment confirm = new Payment();
     Create create = new Create();

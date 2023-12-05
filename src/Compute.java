@@ -1,8 +1,6 @@
 public class Compute extends UserInfo{
 
 
-
-
     public int getUtilfee(){
         int utilfee=0;
 

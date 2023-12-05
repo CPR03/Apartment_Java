@@ -6,7 +6,6 @@ import java.util.ArrayList;
 //Contains Create Account and Create Transaction
 public class Create extends Database{
 
-
     @Override
     public Statement connect() {
         Statement state = null;

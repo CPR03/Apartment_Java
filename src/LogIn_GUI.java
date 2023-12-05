@@ -75,15 +75,14 @@ public class LogIn_GUI extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -108,6 +107,7 @@ public class LogIn_GUI extends JDialog {
 
     }
 
+    //Show Sign Up GUI
     private void onSignUp() {
         //hide login
         setVisible(false);
@@ -119,14 +119,23 @@ public class LogIn_GUI extends JDialog {
     Error error = new Error();
 
     private void onOK() {
+
+        //Will tell if the user input of username and password text field is: Username, "", Password and then Return error
         if(txtUserLog.getText().equals("Username")||txtUserLog.getText().equals("")||txtPass.getText().equals("")||txtPass.getText().equals("Password")){
+
             error.nullInput();
-        }else{
+        }
+
+        else{
+
             Retrieve check = new Retrieve();
-            //if succsessfull go to Dashboard
+
+            //if successful go to Dashboard
             if(check.checkAccount(txtUserLog.getText(), txtPass.getText())){
+
                 dispose();
                 Dashboard_GUI.Dashboard_GUI();
+
             }
         }
 
