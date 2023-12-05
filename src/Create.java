@@ -51,7 +51,7 @@ public class Create extends Database{
                 ResultSet result;
                 result = state.executeQuery("SELECT * FROM apartment.users");
 
-                //Create Account if data base is empty
+                //Create Account if database is empty
                 if (rowCount == 0) {
 
                     // Insert the new user with user_id 1 if database is empty

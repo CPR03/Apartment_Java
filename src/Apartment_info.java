@@ -8,8 +8,6 @@ public class Apartment_info extends UserInfo{
     private String address;
 
 
-
-
     //Set Apartment ID
     public void setApartmentid(int apartment_id) {
         this.apartment_id = apartment_id;

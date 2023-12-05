@@ -39,6 +39,7 @@ public class Add_Balance extends JDialog {
         cmbvia.setSelectedItem("Gcash");
         mode=cmbvia.getSelectedItem().toString();
         UserInfo.set_PaymentMode(mode);
+
         getPaymentmode();
         cmbvia.addActionListener(new ActionListener() {
             @Override
