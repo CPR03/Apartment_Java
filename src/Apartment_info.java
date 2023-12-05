@@ -5,6 +5,10 @@ public class Apartment_info extends UserInfo{
     private int bedcount,price;
     private String status;
     private int apartment_id;
+    private String address;
+
+
+
 
     //Set Apartment ID
     public void setApartmentid(int apartment_id) {
@@ -56,6 +60,8 @@ public class Apartment_info extends UserInfo{
         return status;
     }
 
+    public void setAddress(String Address){address=Address;}
+    public String getAddress(){return address;}
     //Save Apartment Info to User Info
     @Override
     void saveinstance() {
@@ -63,5 +69,7 @@ public class Apartment_info extends UserInfo{
         UserInfo.set_Price(getPrice());
         UserInfo.set_Status(getStatus());
         UserInfo.setApart_id(getApartmentid());
+        UserInfo.set_address(getAddress());
+
     }
 }

@@ -88,9 +88,11 @@ public class Selected_Apr_GUI extends JDialog {
 
             apartmentInfo.setApartmentid(result.getInt("apr_id")); //apartment id
             apartmentInfo.setunitNum(result.getString("unit_number")); //unit number
+            apartmentInfo.setAddress(result.getString("address")); //address
             apartmentInfo.setBedcount(result.getInt("bedcount")); //bedcount
             apartmentInfo.setPrice(result.getInt("unit_price")); //unit price
             apartmentInfo.setStatus(result.getString("status")); //apartment status
+
 
             if(apartmentInfo.getStatus().equals("Unavailable")){
 
@@ -121,7 +123,7 @@ public class Selected_Apr_GUI extends JDialog {
         }
 
         //Set Details to be Display (Unit Number, Bedcount, Price, Status)
-        details.setText("Unit Number: "+ apartmentInfo.getunitNum() + "\nBedcount: " + apartmentInfo.getBedcount()
+        details.setText("Unit Number: "+ apartmentInfo.getunitNum() +"\nAddress: " + apartmentInfo.getAddress()+ "\nBedcount: " + apartmentInfo.getBedcount()
                 +"\nUnit Price: " + apartmentInfo.getPrice() + "\nStatus: "+apartmentInfo.getStatus());
 
     }

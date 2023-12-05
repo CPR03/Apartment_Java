@@ -11,6 +11,7 @@ abstract class UserInfo extends Create{
     private static int price;
     private static int bedcount;
     private static String status;
+    private static String address;
     //Rent info
     private static String duration;
     static ArrayList<String> utilities;
@@ -79,6 +80,9 @@ abstract class UserInfo extends Create{
     public static void set_Status(String Status){
         status=Status;
     }
+
+    public static void set_address(String Address){address=Address;}
+    public static String get_address(){return address;}
 
 
 
