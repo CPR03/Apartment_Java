@@ -107,27 +107,7 @@ public class Pay_GUI extends JDialog {
 
         txtUtil.setText(String.valueOf(compute.getUtilfee()));//Compute Additional fee for Utilities
 
-
-
-
-
-
-
-
-
     }
-//    if(utilities.get(i).equals("Amenities")){
-//        additional=200;
-//    }
-//            else if (utilities.get(i).equals("Wi-Fi")) {
-//        additional=300;
-//    }
-//            else if (utilities.get(i).equals("Cable")) {
-//        additional=400;
-//    }
-//            else{
-//        additional=100; //Water
-//    }
 
     private void getTotal(){
 
@@ -140,7 +120,6 @@ public class Pay_GUI extends JDialog {
 
         totaltxt.setText(String.valueOf(total));
         UserInfo.setMonthly_total(total-chargefee);
-
 
     }
 

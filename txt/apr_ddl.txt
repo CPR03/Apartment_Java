@@ -69,5 +69,55 @@ create table apartment.transaction
         foreign key (user_id) references apartment.users (user_id)
 );
 
+-- auto-generated definition
+create table transaction
+(
+    tran_id            int           not null
+        primary key,
+    Date               date          not null,
+    payment_method     varchar(15)   not null,
+    amount_pay         double        not null,
+    Discount_code      double        null,
+    rent_total         double        not null comment 'overall total',
+    monthly_due_amount double        not null comment 'amount to pay monthly',
+    duration           varchar(15)   not null,
+    amenities          int default 0 not null,
+    wifi               int default 0 not null,
+    cable              int default 0 not null,
+    water              int default 0 not null,
+    user_id            int           not null,
+    apart_id           int           not null,
+    constraint transaction_apartment_unit_apr_id_fk
+        foreign key (apart_id) references apartment_unit (apr_id),
+    constraint transaction_users_user_id_fk
+        foreign key (user_id) references users (user_id)
+);
+
+-- auto-generated definition
+create table unit_photo
+(
+    unit_number varchar(7) not null
+        primary key,
+    unit_photo1 mediumblob not null,
+    unit_photo2 mediumblob not null,
+    unit_photo3 mediumblob not null,
+    unit_photo4 mediumblob not null,
+    unit_photo5 mediumblob not null
+);
+
+-- auto-generated definition
+create table users
+(
+    user_id      int         not null
+        primary key,
+    userName     varchar(50) not null,
+    userPassword varchar(30) not null,
+    Balance      double      null,
+    apr_id       int         null,
+    constraint users_users__fk
+        foreign key (apr_id) references apartment_unit (apr_id)
+);
+
+
 
 
